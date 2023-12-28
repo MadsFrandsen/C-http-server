@@ -1,13 +1,9 @@
+#include <server.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
 
-
-typedef struct {
-    int socket;
-    int port;
-} Server;
 
 
 void init_server(Server *server, int port) {
