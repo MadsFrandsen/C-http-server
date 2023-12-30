@@ -53,7 +53,9 @@ int main(int argc, char **argv) {
 
         // get the path matching the requested page
         if (strcmp(method, "GET") == 0) {
-            if (strcmp(path, "/") == 0) {
+            if (strstr(path, "/static/") != NULL) {
+                strcpy(template, "static/index.css");
+            } else if (strcmp(path, "/") == 0) {
                 strcpy(template, "templates/home.html");
             } else if (strcmp(path, "/about") == 0) {
                 strcpy(template, "templates/about.html");
