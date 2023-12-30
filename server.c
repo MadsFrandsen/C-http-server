@@ -1,8 +1,9 @@
-#include <server.h>
+#include "server.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
+#include <string.h>
 
 
 

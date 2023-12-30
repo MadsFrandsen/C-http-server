@@ -9,7 +9,7 @@ rebuild: clean all
 server.o: server.c server.h
 	$(GCC) -c $< -o $@
 
-get_file.o:
+get_file.o: get_file.c get_file.h
 	$(GCC) -c $< -o $@
 
 main: main.c get_file.o server.o
