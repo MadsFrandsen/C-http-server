@@ -2,6 +2,7 @@
 *.o
 *.out
 *.exe
+main
 
 # Ignore Xcode and other IDE-related files
 .vscode/

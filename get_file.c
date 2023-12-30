@@ -37,7 +37,7 @@ char *get_file(char *fileName) {
     char *buffer = (char *)malloc(fileSize + 1);
 
     // read contents of file to buffer
-    size_t bytesRead = fread(buffer, fileSize, 1, fp);
+    size_t bytesRead = fread(buffer, 1, fileSize, fp);
 
     if (bytesRead != (size_t)fileSize) {
         printf("fread failed.\n");
