@@ -7,6 +7,7 @@
 
 #include "server.h"
 #include "get_file.h"
+#include "routes.h"
 
 
 int main(int argc, char **argv) {
@@ -26,6 +27,13 @@ int main(int argc, char **argv) {
     // initialize the server
     Server server;
     init_server(&server, port);
+
+    // register routes
+    Route *route = initRoute("/", "templates/home.html", 1);
+    addRoute(route, "/about", "templates/about.html", 1);
+    addRoute(route, "/static/index.css", "static/index.css", 2);
+    addRoute(route, "/static/script.js", "static/index.js", 3);
+
 
     while (1) {
         // handle connections
@@ -57,31 +65,29 @@ int main(int argc, char **argv) {
         // buffer to store the path
         char template[100];
 
-        int content_type;
-
         // get the path matching the requested page
         // not very pretty, needs to be modified
         // and serve routes using a data structure (hmap or btree)
-        if (strcmp(method, "GET") == 0) {
-            if (strstr(path, "/static/") != NULL) {
-                if (strcmp(path, "/static/index.css") == 0) {
-                    strcpy(template, "static/index.css");
-                    content_type = 2;
-                } else {
-                    strcpy(template, "static/script.js");
-                    content_type = 3;
-                }
-            } else if (strcmp(path, "/") == 0) {
-                strcpy(template, "templates/home.html");
-                content_type = 1;
-            } else if (strcmp(path, "/about") == 0) {
-                strcpy(template, "templates/about.html");
-                content_type = 1;
-            } else {
-                strcpy(template, "templates/404.html");
-                content_type = 1;
-            }
-        }
+        struct Route *dest = findRoute(route, path);
+        strcpy(template, dest->value);
+
+
+
+        // if (strcmp(method, "GET") == 0) {
+        //     if (strstr(path, "/static/") != NULL) {
+        //         if (strcmp(path, "/static/index.css") == 0) {
+        //             strcpy(template, "static/index.css");
+        //         } else {
+        //             strcpy(template, "static/script.js");
+        //         }
+        //     } else if (strcmp(path, "/") == 0) {
+        //         strcpy(template, "templates/home.html");
+        //     } else if (strcmp(path, "/about") == 0) {
+        //         strcpy(template, "templates/about.html");
+        //     } else {
+        //         strcpy(template, "templates/404.html");
+        //     }
+        // }
 
         // get the page
         char *response_data = get_file(template);

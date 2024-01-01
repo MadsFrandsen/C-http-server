@@ -55,4 +55,18 @@ Route *addRoute(Route *root, char *key, char *value, int content_type) {
 }
 
 
+Route *findRoute(Route *root, char *key) {
+    Route *curr = root;
 
+    while (curr != NULL) {
+        if (strcmp(key, curr->key) == 0) {
+            return curr;
+        } else if (strcmp(key, curr->key) > 0) {
+            curr = curr->right;
+        } else {
+            curr = curr->left;
+        }
+    }
+
+    return NULL;
+}
