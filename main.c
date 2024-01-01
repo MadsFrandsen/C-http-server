@@ -18,6 +18,12 @@ int main(int argc, char **argv) {
 
     int port = atoi(argv[1]);
 
+    if (port == 0) {
+        printf("Please provide valid port as input");
+        exit(EXIT_FAILURE);
+    }
+
+    // initialize the server
     Server server;
     init_server(&server, port);
 
@@ -51,16 +57,29 @@ int main(int argc, char **argv) {
         // buffer to store the path
         char template[100];
 
+        int content_type;
+
         // get the path matching the requested page
+        // not very pretty, needs to be modified
+        // and serve routes using a data structure (hmap or btree)
         if (strcmp(method, "GET") == 0) {
             if (strstr(path, "/static/") != NULL) {
-                strcpy(template, "static/index.css");
+                if (strcmp(path, "/static/index.css") == 0) {
+                    strcpy(template, "static/index.css");
+                    content_type = 2;
+                } else {
+                    strcpy(template, "static/script.js");
+                    content_type = 3;
+                }
             } else if (strcmp(path, "/") == 0) {
                 strcpy(template, "templates/home.html");
+                content_type = 1;
             } else if (strcmp(path, "/about") == 0) {
                 strcpy(template, "templates/about.html");
+                content_type = 1;
             } else {
                 strcpy(template, "templates/404.html");
+                content_type = 1;
             }
         }
 
@@ -71,6 +90,7 @@ int main(int argc, char **argv) {
         char http_header[8192] = "HTTP/1.1 200 OK\r\n\r\n";
         strcat(http_header, response_data);
         strcat(http_header, "\r\n\r\n");
+        // char http_header = send_content(content_type, &response_data);
 
         // send the response, close socket and free allocated data
         send(client_socket, http_header, sizeof(http_header), 0);
