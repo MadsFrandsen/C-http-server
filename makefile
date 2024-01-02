@@ -15,7 +15,10 @@ get_file.o: src/get_file.c include/get_file.h
 routes.o: src/routes.c include/routes.h
 	$(GCC) -c $< -o $@
 
-main: src/main.c get_file.o server.o routes.o
+queue.o: src/queue.c include/queue.h
+	$(GCC) -c $< -o $@
+
+main: src/main.c get_file.o server.o routes.o queue.o
 	$(GCC) $< *.o -o $@ $(LD_FLAGS)
 
 clean: 

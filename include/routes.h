@@ -11,6 +11,8 @@ typedef struct Route {
     struct Route *right;
 } Route;
 
+// extern Route *root;
+
 Route *initRoute(char *key, char *value, char *content_type);
 
 void inorder(Route *root);

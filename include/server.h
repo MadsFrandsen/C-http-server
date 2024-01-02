@@ -1,6 +1,8 @@
 #ifndef SERVER_H
 #define SERVER_H
 
+#define BUFFSIZE 8192
+
 typedef struct {
     int socket;
     int port;
@@ -8,6 +10,8 @@ typedef struct {
 
 void init_server(Server *server, int port);
 
-// char send_content(int content_type, char *response_data);
+// void handle_connection(int client_socket);
+
+// void *thread_function(void *arg);
 
 #endif
