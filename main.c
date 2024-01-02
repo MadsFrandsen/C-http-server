@@ -29,10 +29,10 @@ int main(int argc, char **argv) {
     init_server(&server, port);
 
     // register routes
-    Route *route = initRoute("/", "templates/home.html", 1);
-    addRoute(route, "/about", "templates/about.html", 1);
-    addRoute(route, "/static/index.css", "static/index.css", 2);
-    addRoute(route, "/static/script.js", "static/index.js", 3);
+    Route *route = initRoute("/", "templates/home.html", "Content-Type: text/html");
+    addRoute(route, "/about", "templates/about.html", "Content-Type: text/html");
+    addRoute(route, "/static/index.css", "static/index.css", "Content-Type: text/css");
+    addRoute(route, "/static/script.js", "static/script.js", "Content-Type: text/javascript");
 
 
     while (1) {
@@ -64,46 +64,49 @@ int main(int argc, char **argv) {
 
         // buffer to store the path
         char template[100];
+        memset(template, '\0', sizeof(template));
 
         // get the path matching the requested page
-        // not very pretty, needs to be modified
-        // and serve routes using a data structure (hmap or btree)
         struct Route *dest = findRoute(route, path);
-        strcpy(template, dest->value);
-
-
-
-        // if (strcmp(method, "GET") == 0) {
-        //     if (strstr(path, "/static/") != NULL) {
-        //         if (strcmp(path, "/static/index.css") == 0) {
-        //             strcpy(template, "static/index.css");
-        //         } else {
-        //             strcpy(template, "static/script.js");
-        //         }
-        //     } else if (strcmp(path, "/") == 0) {
-        //         strcpy(template, "templates/home.html");
-        //     } else if (strcmp(path, "/about") == 0) {
-        //         strcpy(template, "templates/about.html");
-        //     } else {
-        //         strcpy(template, "templates/404.html");
-        //     }
-        // }
+        if (dest == NULL) {
+            strncpy(template, "templates/404.html", 98);
+        } else {
+            strncpy(template, dest->value, 98);
+        }
 
         // get the page
         char *response_data = get_file(template);
 
+        if (response_data == NULL) {
+            // handle problem with loading file
+            close(client_socket);
+            continue;
+        }
+
         // create the response header
-        char http_header[8192] = "HTTP/1.1 200 OK\r\n\r\n";
+        char http_header[8192] = "HTTP/1.1 200 OK\r\n";
+        if (dest == NULL) {
+            strcat(http_header, "Content-Type: text/html");    
+        } else {
+            strcat(http_header, dest->content_type);
+        }
+        strcat(http_header, "\r\n\r\n");
         strcat(http_header, response_data);
         strcat(http_header, "\r\n\r\n");
-        // char http_header = send_content(content_type, &response_data);
+
+        // get the size of the buffer
+        size_t content_length = strlen(http_header);
 
         // send the response, close socket and free allocated data
-        send(client_socket, http_header, sizeof(http_header), 0);
+        send(client_socket, http_header, content_length, 0);
         close(client_socket);
         free(response_data);
 
     }
 
+    freeRoutes(route);
+
     return 0;
 }
+
+

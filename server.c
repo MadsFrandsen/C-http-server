@@ -40,24 +40,3 @@ void init_server(Server *server, int port) {
     
     printf("Server at: %d\n", server->port);
 }
-
-
-// char send_content(int content_type, char *response_data) {
-//     switch (content_type) {
-//         case 1:
-//             char http_header[8192] = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n";
-//             strcat(http_header, response_data);
-//             strcat(http_header, "\r\n\r\n");
-//             return http_header;
-//         case 2:
-//             char http_header[8192] = "HTTP/1.1 200 OK\r\nContent-Type: text/css\r\n\r\n";
-//             strcat(http_header, response_data);
-//             strcat(http_header, "\r\n\r\n");
-//             return http_header;
-//         case 3:
-//             char http_header[8192] = "HTTP/1.1 200 OK\r\nContent-Type: text/javascript\r\n\r\n";
-//             strcat(http_header, response_data);
-//             strcat(http_header, "\r\n\r\n");
-//             return http_header;
-//     }
-// }

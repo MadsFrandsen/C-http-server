@@ -1,9 +1,19 @@
+/*
+
+This file contains a binary search tree datastructure used to structure
+the routes. This works fine, however a hashmap would probably be a better
+choice.
+
+*/
+
 #include "routes.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 
-Route *initRoute(char *key, char* value, int content_type) {
+
+// initialize a route
+Route *initRoute(char *key, char *value, char *content_type) {
     Route *route = (Route *)malloc(sizeof(Route));
     
     route->key = key;
@@ -16,6 +26,7 @@ Route *initRoute(char *key, char* value, int content_type) {
     return route;
 }
 
+// print the tree inorder using recursion
 void inorder(Route *root) {
     if (root != NULL) {
         inorder(root->left);
@@ -24,7 +35,8 @@ void inorder(Route *root) {
     }
 }
 
-Route *addRoute(Route *root, char *key, char *value, int content_type) {
+// add a route to the tree
+Route *addRoute(Route *root, char *key, char *value, char *content_type) {
     Route *route = initRoute(key, value, content_type);
 
     if (root == NULL) {
@@ -54,7 +66,7 @@ Route *addRoute(Route *root, char *key, char *value, int content_type) {
     return route;
 }
 
-
+// search the tree for a given route
 Route *findRoute(Route *root, char *key) {
     Route *curr = root;
 
@@ -69,4 +81,13 @@ Route *findRoute(Route *root, char *key) {
     }
 
     return NULL;
+}
+
+// free the tree
+void freeRoutes(Route *root) {
+    if (root != NULL) {
+        freeRoutes(root->left);
+        freeRoutes(root->right);
+        free(root);
+    }
 }
