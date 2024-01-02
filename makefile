@@ -6,16 +6,16 @@ all: main
 
 rebuild: clean all
 
-server.o: server.c server.h
+server.o: src/server.c include/server.h
 	$(GCC) -c $< -o $@
 
-get_file.o: get_file.c get_file.h
+get_file.o: src/get_file.c include/get_file.h
 	$(GCC) -c $< -o $@
 
-routes.o: routes.c routes.h
+routes.o: src/routes.c include/routes.h
 	$(GCC) -c $< -o $@
 
-main: main.c get_file.o server.o routes.o
+main: src/main.c get_file.o server.o routes.o
 	$(GCC) $< *.o -o $@ $(LD_FLAGS)
 
 clean: 

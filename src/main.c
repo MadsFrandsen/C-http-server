@@ -5,9 +5,11 @@
 #include <netinet/in.h>
 #include <unistd.h>
 
-#include "server.h"
-#include "get_file.h"
-#include "routes.h"
+
+
+#include "../include/server.h"
+#include "../include/get_file.h"
+#include "../include/routes.h"
 
 
 int main(int argc, char **argv) {
