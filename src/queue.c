@@ -1,6 +1,10 @@
 #include "../include/queue.h"
 #include <stdlib.h>
 
+// linked list structure to represent a queue
+// used for the threads to grab work from
+
+
 node_t *head = NULL;
 node_t *tail = NULL;
 
