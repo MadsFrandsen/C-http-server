@@ -93,7 +93,7 @@ void handle_connection(int client_socket) {
             strncpy(template, dest->value, 98);
         }
 
-        
+        // open requested file
         FILE *fp = fopen(template, "r");
 
         if (fp == NULL) {
@@ -113,7 +113,7 @@ void handle_connection(int client_socket) {
         }
         strcat(http_header, "\r\n\r\n");
 
-        // send the response, close socket and free allocated data
+        // send the response and close socket
         send(client_socket, http_header, strlen(http_header), 0);
         send_file(client_socket, fp);
         close(client_socket);

@@ -43,6 +43,7 @@ int main(int argc, char **argv) {
     addRoute(root, "/static/script.js", "static/script.js", "Content-Type: text/javascript");
     addRoute(root, "/download-test", "static/test.txt", "Content-Disposition: attachment; filename=test.txt");
     addRoute(root, "/download-world192", "static/world192.txt", "Content-Disposition: attachment; filename=world192.txt");
+    addRoute(root, "/youtube", "templates/youtube.html", "Content-Type: text/html");
 
 
     while (1) {
