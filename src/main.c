@@ -38,8 +38,10 @@ int main(int argc, char **argv) {
     // register routes
     root = initRoute("/", "templates/home.html", "Content-Type: text/html");
     addRoute(root, "/about", "templates/about.html", "Content-Type: text/html");
+    addRoute(root, "/download", "templates/download.html", "Content-Type: text/html");
     addRoute(root, "/static/index.css", "static/index.css", "Content-Type: text/css");
     addRoute(root, "/static/script.js", "static/script.js", "Content-Type: text/javascript");
+    addRoute(root, "/download-test", "static/test.txt", "Content-Disposition: attachment; filename=test.txt");
 
 
     while (1) {

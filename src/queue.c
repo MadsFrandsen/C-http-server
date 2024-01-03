@@ -1,7 +1,7 @@
 #include "../include/queue.h"
 #include <stdlib.h>
 
-// linked list structure to represent a queue
+// linked list data structure to represent a queue
 // used for the threads to grab work from
 
 
