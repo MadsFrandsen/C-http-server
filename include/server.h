@@ -2,6 +2,7 @@
 #define SERVER_H
 
 #include <pthread.h>
+#include <stdio.h>
 #include "routes.h"
 
 #define BUFFSIZE 8192
@@ -19,6 +20,8 @@ typedef struct {
 extern Route *root;
 
 void init_server(Server *server, int port);
+
+void send_file(int client_socket, FILE *fp);
 
 void handle_connection(int client_socket);
 

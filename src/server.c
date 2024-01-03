@@ -50,6 +50,16 @@ void init_server(Server *server, int port) {
     printf("Server at: %d\n", server->port);
 }
 
+// function to send a file in chunks
+void send_file(int client_socket, FILE *fp) {
+    char buffer[BUFFSIZE];
+    size_t bytes_read;
+
+    while ((bytes_read = fread(buffer, 1, sizeof(buffer), fp)) > 0 ) {
+        send(client_socket, buffer, bytes_read, 0);
+    }
+}
+
 // function to handle a connection
 void handle_connection(int client_socket) {
     char client_msg[BUFFSIZE];
@@ -83,11 +93,13 @@ void handle_connection(int client_socket) {
             strncpy(template, dest->value, 98);
         }
 
-        // get the page
-        char *response_data = get_file(template);
+        
+        FILE *fp = fopen(template, "r");
 
-        if (response_data == NULL) {
-            // handle problem with loading file
+        if (fp == NULL) {
+            // error with opening file
+            const char *error_response = "HTTP/1.1 404 Not Found\r\nContent-Type: text/html\r\n\r\n<!DOCTYPE html><html><body><h1>404 Not Found</h1></body></html>";
+            send(client_socket, error_response, strlen(error_response), 0);
             close(client_socket);
             return;
         }
@@ -100,16 +112,11 @@ void handle_connection(int client_socket) {
             strcat(http_header, dest->content_type);
         }
         strcat(http_header, "\r\n\r\n");
-        strcat(http_header, response_data);
-        strcat(http_header, "\r\n\r\n");
-
-        // get the size of the buffer
-        size_t content_length = strlen(http_header);
 
         // send the response, close socket and free allocated data
-        send(client_socket, http_header, content_length, 0);
+        send(client_socket, http_header, strlen(http_header), 0);
+        send_file(client_socket, fp);
         close(client_socket);
-        free(response_data);
 }
 
 // function each thread performs
